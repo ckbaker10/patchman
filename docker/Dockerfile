@@ -44,7 +44,7 @@ RUN pip install --upgrade pip && \
 # Add sources
 COPY . /build
 
-
+ENV PATCHMAN_SETTINGS_PATH "./etc/patchman"
 
 # Prepare assets
 #RUN yarn install --pure-lockfile --production 
