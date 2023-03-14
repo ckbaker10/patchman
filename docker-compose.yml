@@ -23,7 +23,7 @@ services:
       retries: 3
       start_period: 40s
     environment:
-      - TIME_ZONE="Europe/Berlin"
+      - TIME_ZONE=Europe/Berlin
       - BIND_ADDRESS=127.0.0.1:8856
       - SECRET_KEY='VERYSECRETFORDEVELOPMENTONLY'
       - GUNICORN_TIMEOUT=60
