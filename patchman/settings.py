@@ -112,6 +112,9 @@ else:
     else:
       CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
 
+if os.environ.get('TIME_ZONE') is not None:
+  TIME_ZONE = os.environ.get('TIME_ZONE')
+
 if os.environ.get('SECRET_KEY') is not None:
   SECRET_KEY = os.environ.get('SECRET_KEY')
 
