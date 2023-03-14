@@ -82,4 +82,4 @@ ENV BIND_ADDRESS 127.0.0.1:8855
 #    mkdir -p /app/configs && \
 #    cp -r /build/configs/docker_config.py /app/configs
 
-CMD ["sh", "-c", "gunicorn patchman.wsgi -b $BIND_ADDRESS" ]
+CMD ["sh", "-c", "python3 manage.py migrate && gunicorn patchman.wsgi -b $BIND_ADDRESS" ]
