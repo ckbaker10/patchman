@@ -22,7 +22,7 @@ TIME_ZONE = 'America/New_York'
 LANGUAGE_CODE = 'en-us'
 
 # Create a unique string here, and don't share it with anybody.
-SECRET_KEY = ''
+#SECRET_KEY = ''
 
 # Add the IP addresses that your web server will be listening on,
 # instead of '*'
