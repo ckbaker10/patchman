@@ -107,14 +107,31 @@ else:
     THIRD_PARTY_APPS += ['celery']
     CELERY_IMPORTS = ['reports.tasks']
     USE_ASYNC_PROCESSING = True
-    CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
+    if os.environ.get('PATCHMAN_CELERY_BROKER_URL') is not None:
+      CELERY_BROKER_URL = os.environ.get('PATCHMAN_CELERY_BROKER_URL')
+    else:
+      CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
 
-LOGIN_REDIRECT_URL = '/patchman/'
-LOGOUT_REDIRECT_URL = '/patchman/login/'
-LOGIN_URL = '/patchman/login/'
+if os.environ.get('PATCHMAN_LOGIN_REDIRECT_URL') is not None:
+  LOGIN_REDIRECT_URL = os.environ.get('PATCHMAN_REDIRECT_URL')
+else:
+  LOGIN_REDIRECT_URL = '/patchman/'
+  
+if os.environ.get('PATCHMAN_LOGOUT_REDIRECT_URL') is not None:
+  LOGOUT_REDIRECT_URL = os.environ.get('PATCHMAN_LOGOUT_REDIRECT_URL')
+else:
+  LOGOUT_REDIRECT_URL = '/patchman/login/'
+  
+if os.environ.get('PATCHMAN_LOGIN_URL') is not None:
+  LOGIN_URL = os.environ.get('PATCHMAN_LOGIN_URL')
+else:
+  LOGIN_URL = '/patchman/login/'
 
 # URL prefix for static files.
-STATIC_URL = '/patchman/static/'
+if os.environ.get('PATCHMAN_STATIC_URL') is not None:
+  STATIC_URL = os.environ.get('PATCHMAN_STATIC_URL')
+else:
+  STATIC_URL = '/patchman/static/'
 
 # Additional dirs where the media should be copied from
 STATICFILES_DIRS = [os.path.abspath(os.path.join(BASE_DIR, 'patchman/static'))]
@@ -122,7 +139,10 @@ STATICFILES_DIRS = [os.path.abspath(os.path.join(BASE_DIR, 'patchman/static'))]
 # Absolute path to the directory static files should be collected to.
 STATIC_ROOT = '/var/lib/patchman/static/'
 
-if sys.prefix == '/usr':
+if os.environ.get('PATCHMAN_SETTINGS_PATH') is not None:
+    conf_path = os.environ.get('PATCHMAN_SETTINGS_PATH')
+else:
+    sys.prefix == '/usr':
     conf_path = '/etc/patchman'
 else:
     conf_path = os.path.join(sys.prefix, 'etc/patchman')

@@ -1,0 +1,36 @@
+version: "3"
+services:
+  app:
+    #image: powerdnsadmin/pda-legacy:latest
+    image: patchman/custom
+    container_name: patchman
+    restart: always
+    build:
+        context: .
+        dockerfile: docker/Dockerfile
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+    #  - ./git:/app 
+    network_mode: "host"       
+    command: tail -f /dev/null
+    logging:
+      driver: json-file
+      options:
+        max-size: 50m
+    healthcheck:
+      test: ["CMD", "wget","--output-document=-","--quiet","--tries=1","http://127.0.0.1:8082/"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    environment:
+      # Wird erreichbar gemacht über reverse proxy
+      - BIND_ADDRESS=127.0.0.1:8082
+      - SECRET_KEY='DQnCV2B2bxRSn0e529ILqH5Zgw7SeeZvgnYKR83CSThWBQo3dHxq54C6rvKVO6l2'
+      - SQLALCHEMY_DATABASE_URI=mysql://pdnsadminuser:kLSHORrzUputLynwGplRyksxzDch7sTpcVBwYr@127.0.0.1/powerdnsadmin
+      - GUNICORN_TIMEOUT=60
+      - GUNICORN_WORKERS=2
+      - GUNICORN_LOGLEVEL=DEBUG
+      - OFFLINE_MODE=False # True for offline, False for external resources
+      - CSRF_COOKIE_SECURE=False
+      #- SCRIPT_NAME=/patchman
