@@ -35,7 +35,7 @@ MAX_MIRRORS = 5
 DAYS_WITHOUT_REPORT = 14
 
 # Whether to run patchman under the gunicorn web server
-RUN_GUNICORN = False
+#RUN_GUNICORN = False
 
 # Enable memcached
 CACHES = {

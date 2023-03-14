@@ -45,6 +45,7 @@ RUN pip install --upgrade pip && \
 COPY . /build
 
 ENV PATCHMAN_SETTINGS_PATH "./etc/patchman"
+ENV RUN_GUNICORN True
 
 # Prepare assets
 #RUN yarn install --pure-lockfile --production 
