@@ -46,6 +46,7 @@ COPY . /build
 
 ENV PATCHMAN_SETTINGS_PATH "./etc/patchman"
 ENV RUN_GUNICORN True
+ENV BIND_ADDRESS 127.0.0.1:8855
 
 # Prepare assets
 #RUN yarn install --pure-lockfile --production 
@@ -79,4 +80,4 @@ ENV RUN_GUNICORN True
 #    mkdir -p /app/configs && \
 #    cp -r /build/configs/docker_config.py /app/configs
 
-CMD ["gunicorn", "patchman.wsgi", "-b", "0.0.0.0:80" ]
+CMD ["gunicorn", "patchman.wsgi", "-b", "$BIND_ADDRESS" ]

@@ -25,11 +25,11 @@ services:
       start_period: 40s
     environment:
       # Wird erreichbar gemacht über reverse proxy
-      - BIND_ADDRESS="127.0.0.1:8082"
+      - BIND_ADDRESS="127.0.0.1:8856"
       - SECRET_KEY='VERYSECRETFORDEVELOPMENTONLY'
       - GUNICORN_TIMEOUT=60
       - GUNICORN_WORKERS=2
       - GUNICORN_LOGLEVEL=DEBUG
       - OFFLINE_MODE=False # True for offline, False for external resources
       - CSRF_COOKIE_SECURE=False
-      #- SCRIPT_NAME=/patchman
+      - SCRIPT_NAME=/patchman
