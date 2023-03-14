@@ -115,6 +115,9 @@ else:
 if os.environ.get('SECRET_KEY') is not None:
   SECRET_KEY = os.environ.get('SECRET_KEY')
 
+if os.environ.get('RUN_GUNICORN') is not None:
+  RUN_GUNICORN = (os.environ.get('RUN_GUNICORN') == "True")
+
 if os.environ.get('PATCHMAN_LOGIN_REDIRECT_URL') is not None:
   LOGIN_REDIRECT_URL = os.environ.get('PATCHMAN_REDIRECT_URL')
 else:
