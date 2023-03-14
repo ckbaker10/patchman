@@ -26,7 +26,6 @@ services:
     environment:
       # Wird erreichbar gemacht über reverse proxy
       - BIND_ADDRESS="127.0.0.1:8082"
-      - 
       - GUNICORN_TIMEOUT=60
       - GUNICORN_WORKERS=2
       - GUNICORN_LOGLEVEL=DEBUG

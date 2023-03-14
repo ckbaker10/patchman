@@ -141,8 +141,7 @@ STATIC_ROOT = '/var/lib/patchman/static/'
 
 if os.environ.get('PATCHMAN_SETTINGS_PATH') is not None:
     conf_path = os.environ.get('PATCHMAN_SETTINGS_PATH')
-else:
-    sys.prefix == '/usr':
+elif: sys.prefix == '/usr':
     conf_path = '/etc/patchman'
 else:
     conf_path = os.path.join(sys.prefix, 'etc/patchman')
