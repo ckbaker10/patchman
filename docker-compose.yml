@@ -11,8 +11,7 @@ services:
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
     #  - ./git:/app 
-    network_mode: "host"       
-    command: tail -f /dev/null
+    network_mode: "host"
     logging:
       driver: json-file
       options:
