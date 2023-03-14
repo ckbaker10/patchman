@@ -28,6 +28,7 @@ services:
       - GUNICORN_TIMEOUT=60
       - GUNICORN_WORKERS=2
       - GUNICORN_LOGLEVEL=DEBUG
+      - DEBUG=True
       - OFFLINE_MODE=False
       - CSRF_COOKIE_SECURE=False
       - SCRIPT_NAME=/patchman
