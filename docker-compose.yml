@@ -10,6 +10,7 @@ services:
         dockerfile: docker/Dockerfile
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
+      - /root/patchmanDocker/db:/var/lib/patchman/db
     #  - ./git:/app 
     network_mode: "host"
     logging:
