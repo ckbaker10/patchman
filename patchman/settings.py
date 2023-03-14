@@ -112,6 +112,9 @@ else:
     else:
       CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
 
+if os.environ.get('SECRET_KEY') is not None:
+  SECRET_KEY = os.environ.get('SECRET_KEY')
+
 if os.environ.get('PATCHMAN_LOGIN_REDIRECT_URL') is not None:
   LOGIN_REDIRECT_URL = os.environ.get('PATCHMAN_REDIRECT_URL')
 else:
