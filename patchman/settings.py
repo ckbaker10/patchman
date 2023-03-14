@@ -170,12 +170,13 @@ with open(local_settings, 'r', encoding='utf_8') as ls:
 INSTALLED_APPS = DEFAULT_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 if RUN_GUNICORN or (len(sys.argv) > 1 and sys.argv[1] == 'runserver'):  # noqa
-    #LOGIN_REDIRECT_URL = '/'
-    #LOGOUT_REDIRECT_URL = '/login/'
-    #LOGIN_URL = '/login/'
+    if os.environ.get('PATCHMAN_DOCKER') is not None:
+      LOGIN_REDIRECT_URL = '/'
+      LOGOUT_REDIRECT_URL = '/login/'
+      LOGIN_URL = '/login/'
+      STATIC_URL = '/static/'
     STATICFILES_DIRS = [os.path.abspath(os.path.join(BASE_DIR, 'patchman/static'))]  # noqa
-    STATIC_ROOT = os.path.abspath(os.path.join(BASE_DIR, 'run/static'))
-    #STATIC_URL = '/static/'
+    STATIC_ROOT = os.path.abspath(os.path.join(BASE_DIR, 'run/static'))  
     MIDDLEWARE = [
         'django.middleware.security.SecurityMiddleware',
         'whitenoise.middleware.WhiteNoiseMiddleware',
