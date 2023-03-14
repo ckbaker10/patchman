@@ -170,7 +170,7 @@ with open(local_settings, 'r', encoding='utf_8') as ls:
 INSTALLED_APPS = DEFAULT_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 if RUN_GUNICORN or (len(sys.argv) > 1 and sys.argv[1] == 'runserver'):  # noqa
-    if os.environ.get('PATCHMAN_DOCKER') is not None:
+    if os.environ.get('PATCHMAN_DOCKER') is None:
       LOGIN_REDIRECT_URL = '/'
       LOGOUT_REDIRECT_URL = '/login/'
       LOGIN_URL = '/login/'

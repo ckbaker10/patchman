@@ -48,6 +48,7 @@ RUN mkdir -p /var/lib/patchman/db
 
 ENV PATCHMAN_SETTINGS_PATH "./etc/patchman"
 ENV RUN_GUNICORN True
+ENV PATCHMAN_DOCKER True
 ENV BIND_ADDRESS 127.0.0.1:8855
 
 # Prepare assets
