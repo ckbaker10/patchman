@@ -1,0 +1,39 @@
+version: "3"
+services:
+  app:
+    #image: powerdnsadmin/pda-legacy:latest
+    image: patchman/custom
+    container_name: patchman
+    restart: always
+    build:
+        context: .
+        dockerfile: docker/Dockerfile
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - /root/patchmanDocker/db:/var/lib/patchman/db
+    network_mode: "host"
+    logging:
+      driver: json-file
+      options:
+        max-size: 50m
+    healthcheck:
+      test: ["CMD", "wget","--output-document=-","--quiet","--tries=1","http://127.0.0.1:8082/"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    environment:
+      - TIME_ZONE=Europe/Berlin
+      - BIND_ADDRESS=127.0.0.1:8856
+      - PATCHMAN_SECRET_KEY='VERYSECRETFORDEVELOPMENTONLY'
+      - PATCHMAN_MAX_MIRRORS=5
+      - PATCHMAN_DAYS_WITHOUT_REPORT=5
+      - PATCHMAN_CACHE_MEMCACHE=True
+      - PATCHMAN_DB_SQLLITE=True
+      - GUNICORN_TIMEOUT=60
+      - GUNICORN_WORKERS=2
+      - GUNICORN_LOGLEVEL=DEBUG
+      - DEBUG=True
+      - OFFLINE_MODE=False
+      - CSRF_COOKIE_SECURE=False
+      - SCRIPT_NAME=/patchman
