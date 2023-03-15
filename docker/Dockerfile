@@ -56,7 +56,7 @@ RUN apk add --no-cache redis
 
 # Add sources
 COPY . /build
-COPY /build/etc/patchman/local_settings_docker.py /build/etc/patchman/local_settings.py
+COPY ./etc/patchman/local_settings_docker.py /build/etc/patchman/local_settings.py
 
 RUN mkdir -p /var/lib/patchman/db
 
