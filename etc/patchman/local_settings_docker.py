@@ -5,7 +5,12 @@ CACHES = {
           'LOCATION': '127.0.0.1:11211',
       }
   }
-DATABASES = { }
+DATABASES = {
+      'default': {
+          'ENGINE': 'django.db.backends.sqlite3',
+          'NAME': '/var/lib/patchman/db/patchman.db',
+      }
+  }
 
 if os.environ.get('PATCHMAN_DB_SQLLITE') is not None:
   SQLLITEPATH = '/var/lib/patchman/db/patchman.db'
