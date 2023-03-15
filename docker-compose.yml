@@ -11,7 +11,6 @@ services:
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - /root/patchmanDocker/db:/var/lib/patchman/db
-    #  - ./git:/app 
     network_mode: "host"
     logging:
       driver: json-file
@@ -26,7 +25,9 @@ services:
     environment:
       - TIME_ZONE=Europe/Berlin
       - BIND_ADDRESS=127.0.0.1:8856
-      - SECRET_KEY='VERYSECRETFORDEVELOPMENTONLY'
+      - PATCHMAN_SECRET_KEY='VERYSECRETFORDEVELOPMENTONLY'
+      - PATCHMAN_MAX_MIRRORS=5
+      - PATCHMAN_DAYS_WITHOUT_REPORT=5
       - GUNICORN_TIMEOUT=60
       - GUNICORN_WORKERS=2
       - GUNICORN_LOGLEVEL=DEBUG

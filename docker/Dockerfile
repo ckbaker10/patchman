@@ -1,4 +1,6 @@
 FROM alpine:3.17 AS builder
+# https://github.com/nimmis/docker-alpine/blob/master/Dockerfile
+# I would have used his image but the versions are rather old
 
 # ARG BUILD_DEPENDENCIES="build-base \
     # libffi-dev \
@@ -18,8 +20,6 @@ ARG BUILD_DEPENDENCIES="build-base \
     openldap-dev \
     python3-dev \
     xmlsec-dev \
-    npm \
-    yarn \
     cargo"
 
 ENV LC_ALL=en_US.UTF-8 \
@@ -56,6 +56,7 @@ RUN apk add --no-cache redis
 
 # Add sources
 COPY . /build
+COPY /build/etc/patchman/local_settings_docker.py /build/etc/patchman/local_settings.py
 
 RUN mkdir -p /var/lib/patchman/db
 
@@ -67,4 +68,4 @@ ENV BIND_ADDRESS 127.0.0.1:80
 
 RUN chmod +x /build/docker/startup.sh
 
-CMD ["sh", "-c", "docker/startup.sh && gunicorn patchman.wsgi -b $BIND_ADDRESS" ]
+CMD ["sh", "-c", "docker/startup.sh" ]
