@@ -15,7 +15,7 @@ if os.environ.get('DEBUG') is not None:
   DEBUG = os.environ.get('DEBUG')
 
 if os.environ.get('PATCHMAN_SECRET_KEY') is not None:
-  SECRET_KEY = os.environ.get('SECRET_KEY')
+  SECRET_KEY = os.environ.get('PATCHMAN_SECRET_KEY')
 
 if os.environ.get('TIME_ZONE') is not None:
   TIME_ZONE = os.environ.get('TIME_ZONE')
@@ -24,10 +24,10 @@ if os.environ.get('LANGUAGE_CODE') is not None:
   LANGUAGE_CODE = os.environ.get('LANGUAGE_CODE')
 
 if os.environ.get('PATCHMAN_MAX_MIRRORS') is not None:
-  MAX_MIRRORS = os.environ.get('MAX_MIRRORS')
+  MAX_MIRRORS = os.environ.get('PATCHMAN_MAX_MIRRORS')
   
 if os.environ.get('PATCHMAN_DAYS_WITHOUT_REPORT') is not None:
-  DAYS_WITHOUT_REPORT = os.environ.get('DAYS_WITHOUT_REPORT')
+  DAYS_WITHOUT_REPORT = os.environ.get('PATCHMAN_DAYS_WITHOUT_REPORT')
 
 if os.environ.get('PATCHMAN_CACHE_MEMCACHE') is not None:
   MEMCACHEPORT = '11211'
