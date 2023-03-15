@@ -2,7 +2,8 @@
 
 export LC_ALL=C
 
-conf=/etc/patchman/patchman-client.conf
+#conf=/etc/patchman/patchman-client.conf
+conf=./client.conf
 protocol=1
 verbose=false
 debug=false
@@ -11,7 +12,9 @@ local_updates=false
 repo_check=true
 tags=''
 storeLocal=false
-storeDefault=/var/lib/patchman/data/
+storeFile=/var/lib/patchman/data/report.json
+parseFromLocal=false
+parseFile=/var/lib/patchman/data/report.json
 
 usage() {
     echo "${0} [-v] [-d] [-n] [-u] [-r] [-s SERVER] [-c FILE] [-t TAGS] [-h HOSTNAME]"
@@ -25,13 +28,13 @@ usage() {
     echo "-t TAGS: comma-separated list of tags, e.g. -t www,dev"
     echo "-h HOSTNAME: specify the hostname of the local host"
     echo "-L DIRECTORY: Store Data locally"
-    echo
+    echo "-P FILE: Take report from file"
     echo "Command line options override config file options."
     exit 0
 }
 
 parseopts() {
-    while getopts "vdnurs:c:t:h:" opt; do
+    while getopts "vdnurs:c:t:h:L:P:" opt; do
         case ${opt} in
         v)
             verbose=true
@@ -63,6 +66,12 @@ parseopts() {
             ;;
         L)
             storeLocal=true
+            storeFile=${OPTARG}
+            ;;
+        P)
+            parseFromLocal=true
+            parseFile=${OPTARG}
+            ;;
         *)
             usage
             ;;
@@ -87,6 +96,7 @@ cleanup() {
         rm -fr "${tmpfile_rep}"
         rm -fr "${tmpfile_sec}"
         rm -fr "${tmpfile_bug}"
+        echo ""
     fi
     flock -u 200
     rm -fr "${lock_dir}/patchman.lock"
@@ -478,21 +488,62 @@ reboot_required() {
     fi
 }
 
+parseTag() {
+  #SOURCE="$(cat ${parseFile} | pcregrep -Mo '(?<=### '${1}' ###)(\n|.)*?(?=######)' | sed '/^$/d')"
+  SOURCE="$(cat ${parseFile} | awk 'BEGIN {A=0;} /^### '${1}' ###/ {A=1;} /^######/ {A=0} {if (A==1) print;}' | tail -n +2)"
+  echo "$SOURCE"
+}
+
+parseFile(){
+  hostname=$(parseTag "host")
+  tags=$(parseTag "tags")
+  host_kernel=$(parseTag "kernel")
+  host_arch=$(parseTag "arch")
+  protocol=$(parseTag "protocol")
+  os=$(parseTag "os")
+  report=$(parseTag "report")
+  echo "$(parseTag "packages")" >> $tmpfile_pkg
+  echo "$(parseTag "repos")" >> $tmpfile_rep 
+  echo "$(parseTag "sec_updates")" >> $tmpfile_sec 
+  echo "$(parseTag "bug_updates")" >> $tmpfile_bug
+  reboot=$(parseTag "reboot")
+  createdAt=$(parseTag "createdAt")
+}
+
+
+
+# fileToJson() {
+  # ARRAY=$(cat $1 | sed 's!\(^.*$\)!\[\1\]!' | sed "s/' '/', '/g" | tr "'" '"' | sed "s/\]/\],/g")
+  # echo $ARRAY
+# }
+
+printToFile(){
+  echo "### $1 ###" >> $storeFile
+  if [ -f "$2" ] ; then
+    cat ${2} >> $storeFile
+  else
+    echo "${2}" >> $storeFile
+  fi
+  echo "######"  >> $storeFile
+}
+
 save_data() {
-  mkdir -p $storeDefault
-  echo "{" > $storeDefault/report.json
-  echo "host:\"${hostname}\"" >> $storeDefault/report.json
-  echo "tags:\"${tags}\"" >> $storeDefault/report.json
-  echo "kernel:\"${host_kernel}\"" >> $storeDefault/report.json
-  echo "arch:\"${host_arch}\"" >> $storeDefault/report.json
-  echo "protocol:\"${protocol}\"" >> $storeDefault/report.json
-  echo "os:\"${os}\"" >> $storeDefault/report.json
-  echo "report:\"${report}\"" >> $storeDefault/report.json
-  echo "packages:\<${tmpfile_pkg}" >> $storeDefault/report.json
-  echo "repos:\<${tmpfile_rep}" >> $storeDefault/report.json
-  echo "sec_updates:\<${tmpfile_sec}" >> $storeDefault/report.json
-  echo "bug_updates:\<${tmpfile_bug}" >> $storeDefault/report.json
-  echo "reboot:\"${reboot}\"" >> $storeDefault/report.json
+  mkdir -p $(dirname "${storeFile}")
+  rm -f $storeFile
+  printToFile "host" "${hostname}"
+  printToFile "tags" "${tags}"
+  printToFile "kernel" "${host_kernel}"
+  printToFile "arch" "${host_arch}"
+  printToFile "protocol" "${protocol}"
+  printToFile "os" "${os}"
+  printToFile "report" "${report}"
+  printToFile "packages" "${tmpfile_pkg}"
+  printToFile "repos" "${tmpfile_rep}"
+  printToFile "sec_updates" "${tmpfile_sec}"
+  printToFile "bug_updates" "${tmpfile_bug}"
+  printToFile "reboot" "${reboot}"
+  printToFile "createdAt" "$(date +%Y-%m-%d::%H:%M)"
+  printToFile "ipAddr" ""
 }
 
 post_data() {
@@ -510,6 +561,11 @@ post_data() {
     fi
 
     sed -i -e 's/%2b/\+/g' "${tmpfile_pkg}"
+
+    if ${reportIP} ; then
+      # HTTP_X_REAL_IP reports/models.py line 63
+      curl_opts="${curl_opts} -H HTTP_X_REAL_IP=\"${reportIP}\""
+    fi
 
     curl_opts="${curl_opts} -F host=\"${hostname}\""
     curl_opts="${curl_opts} -F tags=\"${tags}\""
@@ -575,13 +631,16 @@ tmpfile_pkg=$(mktemp)
 tmpfile_rep=$(mktemp)
 tmpfile_sec=$(mktemp)
 tmpfile_bug=$(mktemp)
-
-get_host_data
-get_packages
-if ${repo_check} ; then
-    get_repos
+if ${parseFromLocal} ; then
+  parseFile
+else
+  get_host_data
+  get_packages
+  if ${repo_check} ; then
+      get_repos
+  fi
+  reboot_required
 fi
-reboot_required
 if ${storeLocal} ; then
   save_data
 else
