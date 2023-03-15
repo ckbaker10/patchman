@@ -10,6 +10,8 @@ report=false
 local_updates=false
 repo_check=true
 tags=''
+storeLocal=false
+storeDefault=/var/lib/patchman/data/
 
 usage() {
     echo "${0} [-v] [-d] [-n] [-u] [-r] [-s SERVER] [-c FILE] [-t TAGS] [-h HOSTNAME]"
@@ -22,6 +24,7 @@ usage() {
     echo "-c FILE: config file location (default is /etc/patchman/patchman-client.conf)"
     echo "-t TAGS: comma-separated list of tags, e.g. -t www,dev"
     echo "-h HOSTNAME: specify the hostname of the local host"
+    echo "-L DIRECTORY: Store Data locally"
     echo
     echo "Command line options override config file options."
     exit 0
@@ -58,6 +61,8 @@ parseopts() {
         h)
             cli_hostname=${OPTARG}
             ;;
+        L)
+            storeLocal=true
         *)
             usage
             ;;
@@ -473,6 +478,23 @@ reboot_required() {
     fi
 }
 
+save_data() {
+  mkdir -p $storeDefault
+  echo "{" > $storeDefault/report.json
+  echo "host:\"${hostname}\"" >> $storeDefault/report.json
+  echo "tags:\"${tags}\"" >> $storeDefault/report.json
+  echo "kernel:\"${host_kernel}\"" >> $storeDefault/report.json
+  echo "arch:\"${host_arch}\"" >> $storeDefault/report.json
+  echo "protocol:\"${protocol}\"" >> $storeDefault/report.json
+  echo "os:\"${os}\"" >> $storeDefault/report.json
+  echo "report:\"${report}\"" >> $storeDefault/report.json
+  echo "packages:\<${tmpfile_pkg}" >> $storeDefault/report.json
+  echo "repos:\<${tmpfile_rep}" >> $storeDefault/report.json
+  echo "sec_updates:\<${tmpfile_sec}" >> $storeDefault/report.json
+  echo "bug_updates:\<${tmpfile_bug}" >> $storeDefault/report.json
+  echo "reboot:\"${reboot}\"" >> $storeDefault/report.json
+}
+
 post_data() {
     curl_opts=${curl_options}
 
@@ -560,4 +582,8 @@ if ${repo_check} ; then
     get_repos
 fi
 reboot_required
-post_data
+if ${storeLocal} ; then
+  save_data
+else
+  post_data
+fi
