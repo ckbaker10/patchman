@@ -42,7 +42,6 @@ services:
       - "/etc/localtime:/etc/localtime:ro"
       - /root/patchmanDocker/db:/var/lib/patchman/db
       - ./input:/input
-      - /usr/local/share/ca-certificates:/usr/local/share/ca-certificates
     network_mode: "host"
     logging:
       driver: json-file
