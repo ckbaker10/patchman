@@ -557,6 +557,9 @@ save_data() {
   printToFile "createdAt" "$(date +%Y-%m-%d::%H:%M)"
   # IP Addr Parsing is Wonky
   reportIP=$(hostname --all-ip-addresses | grep -oP '([^ ]*)' | head -n 1)
+  if ${verbose} ; then
+    echo 'Reporting IP as ${reportIP}'
+  fi
   printToFile "ipAddr" "${reportIP}"
 }
 
@@ -577,8 +580,11 @@ post_data() {
     sed -i -e 's/%2b/\+/g' "${tmpfile_pkg}"
 
     if [ ! -z ${reportIP} ] ; then
+      if ${verbose} ; then
+        echo 'Reporting IP as ${reportIP}'
+      fi
       # HTTP_X_REAL_IP reports/models.py line 63
-      curl_opts="${curl_opts} -H HTTP_X_REAL_IP=\"${reportIP}\""
+      curl_opts="${curl_opts} -H \"HTTP_X_REAL_IP: ${reportIP}\""
     fi
 
     curl_opts="${curl_opts} -F host=\"${hostname}\""
