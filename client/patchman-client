@@ -36,7 +36,7 @@ usage() {
 }
 
 parseopts() {
-    while getopts "vdnursD:c:t:h:L:P:" opt; do
+    while getopts "vdnurs:c:t:h:L:P:D" opt; do
         case ${opt} in
         v)
             verbose=true
@@ -513,6 +513,7 @@ parseFile(){
   echo "$(parseTag "bug_updates")" >> $tmpfile_bug
   reboot=$(parseTag "reboot")
   createdAt=$(parseTag "createdAt")
+  reportIP=$(parseTag "ipAddr")
   if ${deleteAfterParse} ; then
     rm -f "${parseFile}"
   fi
@@ -537,7 +538,7 @@ printToFile(){
 
 save_data() {
   mkdir -p $(dirname "${storeFile}")
-  rm -f $storeFile
+  rm -f "${storeFile}"
   printToFile "host" "${hostname}"
   printToFile "tags" "${tags}"
   printToFile "kernel" "${host_kernel}"
@@ -551,7 +552,9 @@ save_data() {
   printToFile "bug_updates" "${tmpfile_bug}"
   printToFile "reboot" "${reboot}"
   printToFile "createdAt" "$(date +%Y-%m-%d::%H:%M)"
-  printToFile "ipAddr" ""
+  # IP Addr Parsing is Wonky
+  reportIP=$("hostname --all-ip-addresses | grep -oP '([^ ]*)' | head -n 1")
+  printToFile "ipAddr" "${reportIP}"
 }
 
 post_data() {
