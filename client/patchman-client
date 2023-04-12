@@ -15,6 +15,7 @@ storeLocal=false
 storeFile=/var/lib/patchman/data/report.json
 parseFromLocal=false
 parseFile=/var/lib/patchman/data/report.json
+deleteAfterParse=false
 
 usage() {
     echo "${0} [-v] [-d] [-n] [-u] [-r] [-s SERVER] [-c FILE] [-t TAGS] [-h HOSTNAME]"
@@ -27,14 +28,15 @@ usage() {
     echo "-c FILE: config file location (default is /etc/patchman/patchman-client.conf)"
     echo "-t TAGS: comma-separated list of tags, e.g. -t www,dev"
     echo "-h HOSTNAME: specify the hostname of the local host"
-    echo "-L DIRECTORY: Store Data locally"
+    echo "-L FILE: Store Data locally"
     echo "-P FILE: Take report from file"
+    echo "-D delete file after parsing"
     echo "Command line options override config file options."
     exit 0
 }
 
 parseopts() {
-    while getopts "vdnurs:c:t:h:L:P:" opt; do
+    while getopts "vdnursD:c:t:h:L:P:" opt; do
         case ${opt} in
         v)
             verbose=true
@@ -63,6 +65,9 @@ parseopts() {
             ;;
         h)
             cli_hostname=${OPTARG}
+            ;;
+        D)
+            deleteAfterParse=true
             ;;
         L)
             storeLocal=true
@@ -508,6 +513,9 @@ parseFile(){
   echo "$(parseTag "bug_updates")" >> $tmpfile_bug
   reboot=$(parseTag "reboot")
   createdAt=$(parseTag "createdAt")
+  if ${deleteAfterParse} ; then
+    rm -f "${parseFile}"
+  fi
 }
 
 
