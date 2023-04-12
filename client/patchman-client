@@ -500,6 +500,9 @@ parseTag() {
 }
 
 parseFile(){
+  if ${verbose} ; then
+    echo 'Parsing file ${parseFile}'
+  fi
   hostname=$(parseTag "host")
   tags=$(parseTag "tags")
   host_kernel=$(parseTag "kernel")
@@ -553,7 +556,7 @@ save_data() {
   printToFile "reboot" "${reboot}"
   printToFile "createdAt" "$(date +%Y-%m-%d::%H:%M)"
   # IP Addr Parsing is Wonky
-  reportIP=$("hostname --all-ip-addresses | grep -oP '([^ ]*)' | head -n 1")
+  reportIP=$(hostname --all-ip-addresses | grep -oP '([^ ]*)' | head -n 1)
   printToFile "ipAddr" "${reportIP}"
 }
 
