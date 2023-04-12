@@ -128,7 +128,7 @@ check_conf() {
         fi
     fi
 
-    if [ -z "${server}" ] && [ -z "${cli_server}" ] ; then
+    if [ -z "${server}" ] || [ -z "${cli_server}" ] ; then
         echo 'Patchman server not set, exiting.'
         exit 1
     else
