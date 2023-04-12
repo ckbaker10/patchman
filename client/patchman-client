@@ -576,7 +576,7 @@ post_data() {
 
     sed -i -e 's/%2b/\+/g' "${tmpfile_pkg}"
 
-    if ${reportIP} ; then
+    if [ ! -z ${reportIP} ] ; then
       # HTTP_X_REAL_IP reports/models.py line 63
       curl_opts="${curl_opts} -H HTTP_X_REAL_IP=\"${reportIP}\""
     fi
