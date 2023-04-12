@@ -65,6 +65,8 @@ ENV RUN_GUNICORN True
 ENV PATCHMAN_DOCKER True
 ENV BIND_ADDRESS 127.0.0.1:80
 
+# Install Patchman Python locally for patchman -a
+RUN cd /build && python3 setup.py install
 
 RUN chmod +x /build/docker/startup.sh
 

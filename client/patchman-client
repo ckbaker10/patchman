@@ -558,7 +558,7 @@ save_data() {
   # IP Addr Parsing is Wonky
   reportIP=$(hostname --all-ip-addresses | grep -oP '([^ ]*)' | head -n 1)
   if ${verbose} ; then
-    echo 'Reporting IP as ${reportIP}'
+    echo "Reporting IP as ${reportIP}"
   fi
   printToFile "ipAddr" "${reportIP}"
 }
@@ -581,7 +581,7 @@ post_data() {
 
     if [ ! -z ${reportIP} ] ; then
       if ${verbose} ; then
-        echo 'Reporting IP as ${reportIP}'
+        echo "Reporting IP as ${reportIP}"
       fi
       # HTTP_X_REAL_IP reports/models.py line 63
       curl_opts="${curl_opts} -H \"HTTP_X_REAL_IP: ${reportIP}\""
