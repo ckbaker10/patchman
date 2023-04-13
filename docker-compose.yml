@@ -47,7 +47,7 @@ services:
       - ./input:/input
     command: tail -f /dev/null
     ports:
-      - "127.0.0.1:8856:8856"
+      - "127.0.0.1:8856:127.0.0.1:8856"
     logging:
       driver: json-file
       options:
