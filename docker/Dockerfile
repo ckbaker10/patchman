@@ -62,8 +62,8 @@ RUN mkdir -p /var/lib/patchman/db
 
 # Add sources
 COPY . /build
-COPY /build/etc/patchman/local_settings_docker.py /build/etc/patchman/local_settings.py
-COPY /build/etc/patchman/local_settings_docker.py /etc/patchman/local_settings.py 
+COPY ./etc/patchman/local_settings_docker.py /build/etc/patchman/local_settings.py
+COPY ./etc/patchman/local_settings_docker.py /etc/patchman/local_settings.py 
 
 
 
