@@ -41,19 +41,20 @@ services:
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - /root/patchmanDocker/db:/var/lib/patchman/db
-      - "/usr/local/share/ca-certificates:/build/docker/certs:ro"
+      # Add Host Trusted Certificates
+      - "/usr/local/share/ca-certificates:/build/docker/certs/custom:ro"
       - ./input:/input
     network_mode: "host"
     logging:
       driver: json-file
       options:
         max-size: 50m
-    healthcheck:
-      test: ["CMD", "patchman", "-a" ]
-      interval: 10m
-      timeout: 8m
-      retries: 3
-      start_period: 2m
+    #healthcheck:
+    #  test: ["CMD", "patchman", "-a" ]
+    #  interval: 10m
+    #  timeout: 8m
+    #  retries: 3
+    #  start_period: 2m
     depends_on:
       cache:
         condition: service_healthy
