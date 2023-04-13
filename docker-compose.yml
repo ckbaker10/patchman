@@ -47,7 +47,7 @@ services:
       - ./input:/input
     command: tail -f /dev/null
     ports:
-      - "127.0.0.1:8856:127.0.0.1:8856"
+      - "127.0.0.1:8856:8856"
     logging:
       driver: json-file
       options:
@@ -82,7 +82,7 @@ services:
       - REDISAUTH=exampleRedisPassword
       # Configuration
       - TIME_ZONE=Europe/Berlin
-      - BIND_ADDRESS=127.0.0.1:8856
+      - BIND_ADDRESS=0.0.0.0:8856
       - PATCHMAN_SECRET_KEY=VERYSECRETFORDEVELOPMENTONLY
       - PATCHMAN_MAX_MIRRORS=5
       - PATCHMAN_DAYS_WITHOUT_REPORT=5
