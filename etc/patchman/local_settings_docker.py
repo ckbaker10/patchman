@@ -17,6 +17,8 @@ DATABASES = {
   }
 }
 
+USE_ASYNC_PROCESSING = False
+
 if os.environ.get('PATCHMAN_DB') == "SQLLITE":
   SQLLITEPATH = '/var/lib/patchman/db/patchman.db'
   if os.environ.get('SQLLITEPATH') is not None:
@@ -96,6 +98,10 @@ elif os.environ.get('PATCHMAN_CACHE') == "REDIS":
       "KEY_PREFIX": str(REDISKEYPREFIX)
     }
   }
+
+  
+  CELERY_BROKER_URL = 'redis://+ str(REDISHOST) + ":" + str(REDISPORT) + "/0",
+
 
 if DOCKER_VERBOSE_CONFIG:
   print("-------------PARSED DOCKER ENVIRONMENT VARIABLES-------------")
