@@ -8,8 +8,9 @@ python3 /build/manage.py migrate --run-syncdb
 set -x
 if [ -d ./certs ]; then
   if ls ./certs/*.crt 1> /dev/null 2>&1; then
-    cp ./certs/custom/*.crt >> /etc/ssl/certs/ca-certificates.crt
-    cat ./certs/*.crt > /usr/local/share/certs.crt
+    cat ./certs/custom/*.crt >> /etc/ssl/certs/ca-certificates.crt
+    export SSL_CERT_DIR=/etc/ssl/certs
+    
     #if [ ! -f /usr/lib/python3.10/site-packages/certifi/cacert.pem.orig ]; then
     #  cp /usr/lib/python3.10/site-packages/certifi/cacert.pem /usr/lib/python3.10/site-packages/certifi/cacert.pem.orig
     #fi
@@ -20,7 +21,7 @@ if [ -d ./certs ]; then
     ##cat ./certs/*.crt >> /usr/lib/python3.10/site-packages/certifi/cacert.pem
     cat <<\EOF > /etc/pip.conf
 [global]
-cert = /usr/local/share/certs.crt
+cert = /etc/ssl/certs/ca-certificates.crt
 EOF
   fi
 fi
