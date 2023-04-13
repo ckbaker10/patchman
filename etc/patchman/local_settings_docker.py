@@ -17,10 +17,46 @@ if os.environ.get('PATCHMAN_DB') is "SQLLITE":
   DATABASES = {
       'default': {
           'ENGINE': 'django.db.backends.sqlite3',
-          'NAME': '/var/lib/patchman/db/patchman.db',
+          'NAME': str(SQLLITEPATH),
+      }
+  }
+else if os.environ.get('PATCHMAN_DB') is "POSTGRES":
+  SQLLITEPATH = '/var/lib/patchman/db/patchman.db'
+  DATABASES = {
+      'default': {
+          'ENGINE': 'django.db.backends.sqlite3',
+          'NAME': str(SQLLITEPATH),
       }
   }
   
+if os.environ.get('PATCHMAN_CACHE') is "MEMCACHE":
+  MEMCACHEPORT = '11211'
+  MEMCACHEHOST = '127.0.0.1'
+  CACHES = {
+      'default': {
+          'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+          'LOCATION': str(MEMCACHEHOST)+ ":"+str(MEMCACHEHOST),
+      }
+  }
+else if os.environ.get('PATCHMAN_CACHE') is "REDIS":
+  REDISHOST = "127.0.0.1"
+  REDISPORT = 6379
+  REDISDB = 1
+  REDISAUTH = ""
+  REDISKEYPREFIX = "patchman"
+  
+  CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://"+str(REDISHOST)+":"+str(REDISPORT)+"/"+str(REDISDB),
+        "OPTIONS": {
+            "PASSWORD": str(REDISAUTH),
+            "CLIENT_CLASS": "django_redis.client.DefaultClient"
+        },
+        "KEY_PREFIX": str(REDISKEYPREFIX)
+    }
+  }
+
 if os.environ.get('DEBUG') is not None:
   DEBUG = os.environ.get('DEBUG')
 
@@ -39,17 +75,7 @@ if os.environ.get('PATCHMAN_MAX_MIRRORS') is not None:
 if os.environ.get('PATCHMAN_DAYS_WITHOUT_REPORT') is not None:
   DAYS_WITHOUT_REPORT = os.environ.get('PATCHMAN_DAYS_WITHOUT_REPORT')
 
-if os.environ.get('PATCHMAN_CACHE') is "MEMCACHE":
-  MEMCACHEPORT = '11211'
-  MEMCACHEHOST = '127.0.0.1'
-  CACHES = {
-      'default': {
-          'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-          'LOCATION': '127.0.0.1:11211',
-      }
-  }
-else if os.environ.get('PATCHMAN_CACHE') is "REDIS":
-  
+
   
 if os.environ.get('RUN_GUNICORN') is not None:
   RUN_GUNICORN = (os.environ.get('RUN_GUNICORN') == "True")
