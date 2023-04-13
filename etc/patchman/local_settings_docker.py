@@ -12,7 +12,7 @@ DATABASES = {
       }
   }
 
-if os.environ.get('PATCHMAN_DB_SQLLITE') is not None:
+if os.environ.get('PATCHMAN_DB') is "SQLLITE":
   SQLLITEPATH = '/var/lib/patchman/db/patchman.db'
   DATABASES = {
       'default': {
@@ -39,7 +39,7 @@ if os.environ.get('PATCHMAN_MAX_MIRRORS') is not None:
 if os.environ.get('PATCHMAN_DAYS_WITHOUT_REPORT') is not None:
   DAYS_WITHOUT_REPORT = os.environ.get('PATCHMAN_DAYS_WITHOUT_REPORT')
 
-if os.environ.get('PATCHMAN_CACHE_MEMCACHE') is not None:
+if os.environ.get('PATCHMAN_CACHE') is "MEMCACHE":
   MEMCACHEPORT = '11211'
   MEMCACHEHOST = '127.0.0.1'
   CACHES = {
@@ -48,6 +48,7 @@ if os.environ.get('PATCHMAN_CACHE_MEMCACHE') is not None:
           'LOCATION': '127.0.0.1:11211',
       }
   }
+else if os.environ.get('PATCHMAN_CACHE') is "REDIS":
   
 if os.environ.get('RUN_GUNICORN') is not None:
   RUN_GUNICORN = (os.environ.get('RUN_GUNICORN') == "True")
