@@ -5,14 +5,14 @@ cd "$SCRIPTPATH"
 python3 /build/manage.py makemigrations
 python3 /build/manage.py migrate --run-syncdb
 
+set -x
 if [ -d ./certs ]; then
   if ls ./certs/*.crt 1> /dev/null 2>&1; then
-    cp ./certs/custom/*.crt /usr/local/share/ca-certificates/
-    update-ca-certificates
-    cat ./certs/*.crt > /usr/local/share/ca-certificates/certs.crt
-    if [ ! -f /usr/lib/python3.10/site-packages/certifi/cacert.pem.orig ]; then
-      cp /usr/lib/python3.10/site-packages/certifi/cacert.pem /usr/lib/python3.10/site-packages/certifi/cacert.pem.orig
-    fi
+    cp ./certs/custom/*.crt >> /etc/ssl/certs/ca-certificates.crt
+    cat ./certs/*.crt > /usr/local/share/certs.crt
+    #if [ ! -f /usr/lib/python3.10/site-packages/certifi/cacert.pem.orig ]; then
+    #  cp /usr/lib/python3.10/site-packages/certifi/cacert.pem /usr/lib/python3.10/site-packages/certifi/cacert.pem.orig
+    #fi
     # Restore original content first if we are restarting here
     cat /usr/lib/python3.10/site-packages/certifi/cacert.pem.orig > /usr/lib/python3.10/site-packages/certifi/cacert.pem
     # Add custom certs to certifi truststore
@@ -20,7 +20,7 @@ if [ -d ./certs ]; then
     ##cat ./certs/*.crt >> /usr/lib/python3.10/site-packages/certifi/cacert.pem
     cat <<\EOF > /etc/pip.conf
 [global]
-cert = /usr/local/share/ca-certificates/certs.crt
+cert = /usr/local/share/certs.crt
 EOF
   fi
 fi
