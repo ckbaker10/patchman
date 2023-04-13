@@ -24,6 +24,7 @@ ARG BUILD_DEPENDENCIES="build-base \
     postgresql-libs \
     gcc \
     musl-dev \
+    curl \
     postgresql-dev" 
     
 
@@ -75,6 +76,7 @@ ENV PATCHMAN_SETTINGS_PATH "/build/etc/patchman"
 ENV RUN_GUNICORN True
 ENV PATCHMAN_DOCKER True
 ENV BIND_ADDRESS 127.0.0.1:80
+ENV SSL_CERT_DIR /etc/ssl/certs
 
 
 RUN chmod +x /build/docker/startup.sh
