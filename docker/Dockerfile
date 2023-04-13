@@ -66,7 +66,7 @@ COPY ./etc/patchman/local_settings_docker.py /etc/patchman/local_settings.py
 # Install Patchman Python locally for patchman -a
 RUN python3 setup.py install
 
-ENV PATCHMAN_SETTINGS_PATH "./etc/patchman"
+ENV PATCHMAN_SETTINGS_PATH "/build/etc/patchman"
 ENV RUN_GUNICORN True
 ENV PATCHMAN_DOCKER True
 ENV BIND_ADDRESS 127.0.0.1:80
