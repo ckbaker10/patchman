@@ -4,25 +4,25 @@ if os.environ.get('DOCKER_VERBOSE_CONFIG') is not None:
   DOCKER_VERBOSE_CONFIG = True
 
 CACHES = {
-      'default': {
-          'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-          'LOCATION': '127.0.0.1:11211',
-      }
+  'default': {
+    'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+    'LOCATION': '127.0.0.1:11211',
   }
+}
 DATABASES = {
-      'default': {
-          'ENGINE': 'django.db.backends.sqlite3',
-          'NAME': '/var/lib/patchman/db/patchman.db',
-      }
+  'default': {
+    'ENGINE': 'django.db.backends.sqlite3',
+    'NAME': '/var/lib/patchman/db/patchman.db',
   }
+}
 
 if os.environ.get('PATCHMAN_DB') is "SQLLITE":
   SQLLITEPATH = '/var/lib/patchman/db/patchman.db'
   DATABASES = {
-      'default': {
-          'ENGINE': 'django.db.backends.sqlite3',
-          'NAME': str(SQLLITEPATH),
-      }
+    'default': {
+      'ENGINE': 'django.db.backends.sqlite3',
+      'NAME': str(SQLLITEPATH),
+    }
   }
 else if os.environ.get('PATCHMAN_DB') is "POSTGRES":
   POSTGRES_USER = "patchman"
@@ -31,25 +31,25 @@ else if os.environ.get('PATCHMAN_DB') is "POSTGRES":
   POSTGRES_HOST = "127.0.0.1"
   POSTGRES_PORT = ""
   DATABASES = {
-   'default': {
-       'ENGINE': 'django.db.backends.postgresql_psycopg2',
-       'NAME': str(POSTGRES_DB),
-       'USER': str(POSTGRES_USER),
-       'PASSWORD': str(POSTGRES_PASSWORD),
-       'HOST': str(POSTGRES_HOST),
-       'PORT': str(POSTGRES_PORT),
-       'CHARSET' : 'utf8'
-   }
-}
+    'default': {
+      'ENGINE': 'django.db.backends.postgresql_psycopg2',
+      'NAME': str(POSTGRES_DB),
+      'USER': str(POSTGRES_USER),
+      'PASSWORD': str(POSTGRES_PASSWORD),
+      'HOST': str(POSTGRES_HOST),
+      'PORT': str(POSTGRES_PORT),
+      'CHARSET' : 'utf8'
+    }
+  }
   
 if os.environ.get('PATCHMAN_CACHE') is "MEMCACHE":
   MEMCACHEPORT = '11211'
   MEMCACHEHOST = '127.0.0.1'
   CACHES = {
-      'default': {
-          'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-          'LOCATION': str(MEMCACHEHOST)+ ":"+str(MEMCACHEHOST),
-      }
+    'default': {
+      'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+      'LOCATION': str(MEMCACHEHOST)+ ":"+str(MEMCACHEHOST),
+    }
   }
 else if os.environ.get('PATCHMAN_CACHE') is "REDIS":
   REDISHOST = "127.0.0.1"
@@ -60,13 +60,13 @@ else if os.environ.get('PATCHMAN_CACHE') is "REDIS":
   
   CACHES = {
     "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://"+str(REDISHOST)+":"+str(REDISPORT)+"/"+str(REDISDB),
-        "OPTIONS": {
-            "PASSWORD": str(REDISAUTH),
-            "CLIENT_CLASS": "django_redis.client.DefaultClient"
-        },
-        "KEY_PREFIX": str(REDISKEYPREFIX)
+      "BACKEND": "django_redis.cache.RedisCache",
+      "LOCATION": "redis://"+str(REDISHOST)+":"+str(REDISPORT)+"/"+str(REDISDB),
+      "OPTIONS": {
+        "PASSWORD": str(REDISAUTH),
+        "CLIENT_CLASS": "django_redis.client.DefaultClient"
+      },
+      "KEY_PREFIX": str(REDISKEYPREFIX)
     }
   }
 
@@ -80,7 +80,7 @@ if os.environ.get('DEBUG') is not None:
     pp DEBUG
 
 if os.environ.get('PATCHMAN_SECRET_KEY') is not None:
-  SECRET_KEY = os.environ.get('PATCHMAN_SECRET_KEY')
+  SECRET_KEY = str(os.environ.get('PATCHMAN_SECRET_KEY'))
   if DOCKER_VERBOSE_CONFIG:
     pp SECRET_KEY
 

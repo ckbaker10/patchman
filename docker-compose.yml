@@ -6,7 +6,7 @@ services:
     restart: always
     #ports:
     #  - '6379:6379'
-    command: redis-server --save 20 1 --loglevel warning --requirepass eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+    command: redis-server --save 20 1 --loglevel warning --requirepass exampleRedisPassword
     volumes: 
       - ./cache:/data
     healthcheck:
@@ -19,8 +19,9 @@ services:
     image: postgres:latest
     restart: always
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=patchman
+      - POSTGRES_PASSWORD=patchman
+      - POSTGRES_DB=patchman
     #ports:
     #  - '5432:5432'
     volumes: 
@@ -56,6 +57,7 @@ services:
     #  timeout: 8m
     #  retries: 3
     #  start_period: 2m
+    # Wait for Services to come up
     depends_on:
       cache:
         condition: service_healthy
@@ -63,13 +65,25 @@ services:
         condition: service_healthy
       
     environment:
+      # Enable Parsed Config Printing
+      - DOCKER_VERBOSE_CONFIG=True
+      # Database
+      - PATCHMAN_DB=POSTGRES
+      # Use Containername as Host
+      - POSTGRES_HOST=patchman-db
+      - POSTGRES_USER=patchman
+      - POSTGRES_PASSWORD=patchman
+      - POSTGRES_DB=patchman
+      # Cache
+      - PATCHMAN_CACHE=REDIS
+      # Use Containername as Host
+      - REDISHOST=patchman-cache
+      # Configuration
       - TIME_ZONE=Europe/Berlin
       - BIND_ADDRESS=127.0.0.1:8856
-      - PATCHMAN_SECRET_KEY='VERYSECRETFORDEVELOPMENTONLY'
+      - PATCHMAN_SECRET_KEY=VERYSECRETFORDEVELOPMENTONLY
       - PATCHMAN_MAX_MIRRORS=5
       - PATCHMAN_DAYS_WITHOUT_REPORT=5
-      - PATCHMAN_CACHE=MEMCACHE
-      - PATCHMAN_DB=SQLLITE
       - GUNICORN_TIMEOUT=60
       - GUNICORN_WORKERS=2
       - GUNICORN_LOGLEVEL=DEBUG
@@ -77,4 +91,3 @@ services:
       - OFFLINE_MODE=False
       - CSRF_COOKIE_SECURE=False
       - SCRIPT_NAME=/patchman
-      - DOCKER_VERBOSE_CONFIG=True
