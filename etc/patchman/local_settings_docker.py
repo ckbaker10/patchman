@@ -50,5 +50,6 @@ if os.environ.get('PATCHMAN_CACHE') is "MEMCACHE":
   }
 else if os.environ.get('PATCHMAN_CACHE') is "REDIS":
   
+  
 if os.environ.get('RUN_GUNICORN') is not None:
   RUN_GUNICORN = (os.environ.get('RUN_GUNICORN') == "True")
