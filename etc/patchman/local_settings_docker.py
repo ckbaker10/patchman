@@ -6,6 +6,7 @@ DOCKER_VERBOSE_CONFIG = False
 if os.environ.get('DOCKER_VERBOSE_CONFIG') is not None:
   DOCKER_VERBOSE_CONFIG = True
 
+# Default Values
 CACHES = {
 }
 
@@ -97,10 +98,11 @@ elif os.environ.get('PATCHMAN_CACHE') == "REDIS":
   }
 
 if DOCKER_VERBOSE_CONFIG:
-    print("DATABASES")
-    pp.pprint(DATABASES)
-    print("CACHES")
-    pp.pprint(CACHES)
+  print("-------------PARSED DOCKER ENVIRONMENT VARIABLES-------------")
+  print("DATABASES")
+  pp.pprint(DATABASES)
+  print("CACHES")
+  pp.pprint(CACHES)
 
 if os.environ.get('DEBUG') is not None:
   DEBUG = os.environ.get('DEBUG')
@@ -144,3 +146,6 @@ if os.environ.get('RUN_GUNICORN') is not None:
   if DOCKER_VERBOSE_CONFIG:
     print("RUN_GUNICORN")
     pp.pprint(RUN_GUNICORN)
+    
+if DOCKER_VERBOSE_CONFIG:
+  print("-------------------------------------------------------------")
