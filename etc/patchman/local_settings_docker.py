@@ -23,7 +23,7 @@ if os.environ.get('PATCHMAN_DB') is "SQLLITE":
       'NAME': str(SQLLITEPATH),
     }
   }
-else if os.environ.get('PATCHMAN_DB') is "POSTGRES":
+elif os.environ.get('PATCHMAN_DB') is "POSTGRES":
   POSTGRES_USER = "patchman"
   POSTGRES_PASSWORD = "patchman"
   POSTGRES_DB = "patchman"
@@ -64,7 +64,7 @@ if os.environ.get('PATCHMAN_CACHE') is "MEMCACHE":
       'LOCATION': str(MEMCACHEHOST) + ":" + str(MEMCACHEHOST),
     }
   }
-else if os.environ.get('PATCHMAN_CACHE') is "REDIS":
+elif os.environ.get('PATCHMAN_CACHE') is "REDIS":
   REDISHOST = "127.0.0.1"
   REDISPORT = 6379
   REDISDB = 1
