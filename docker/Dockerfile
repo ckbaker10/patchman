@@ -20,7 +20,12 @@ ARG BUILD_DEPENDENCIES="build-base \
     openldap-dev \
     python3-dev \
     xmlsec-dev \
-    cargo"
+    cargo \
+    postgresql-libs \
+    gcc \
+    musl-dev \
+    postgresql-dev" 
+    
 
 ENV LC_ALL=en_US.UTF-8 \
     LANG=en_US.UTF-8 \
