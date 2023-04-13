@@ -10,6 +10,13 @@ if [ -f ./certs ]; then
     cp ./certs/custom/*.crt /usr/local/share/ca-certificates/
     update-ca-certificates
     cat ./certs/*.crt > /usr/local/share/ca-certificates/certs.crt
+    if [ ! -f /usr/lib/python3.10/site-packages/certifi/cacert.pem.orig ]; then
+      cp /usr/lib/python3.10/site-packages/certifi/cacert.pem /usr/lib/python3.10/site-packages/certifi/cacert.pem.orig
+    fi
+    # Restore original content first if we are restarting here
+    cat /usr/lib/python3.10/site-packages/certifi/cacert.pem.orig > /usr/lib/python3.10/site-packages/certifi/cacert.pem
+    # Add custom certs to certifi truststore
+    cat ./certs/*.crt >> /usr/lib/python3.10/site-packages/certifi/cacert.pem
     cat <<\EOF > /etc/pip.conf
 [global]
 cert = /usr/local/share/ca-certificates/certs.crt
