@@ -57,6 +57,16 @@ else if os.environ.get('PATCHMAN_CACHE') is "REDIS":
   REDISDB = 1
   REDISAUTH = ""
   REDISKEYPREFIX = "patchman"
+  if os.environ.get('REDISHOST') is not None:
+    REDISHOST = str(os.environ.get('REDISHOST'))
+  if os.environ.get('REDISPORT') is not None:
+    REDISPORT = str(os.environ.get('REDISPORT'))
+  if os.environ.get('REDISDB') is not None:
+    REDISDB = str(os.environ.get('REDISDB'))
+  if os.environ.get('REDISAUTH') is not None:
+    REDISAUTH = str(os.environ.get('REDISAUTH'))
+  if os.environ.get('REDISKEYPREFIX') is not None:
+    REDISKEYPREFIX = str(os.environ.get('REDISKEYPREFIX'))
   
   CACHES = {
     "default": {

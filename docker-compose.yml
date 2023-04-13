@@ -78,6 +78,7 @@ services:
       - PATCHMAN_CACHE=REDIS
       # Use Containername as Host
       - REDISHOST=patchman-cache
+      - REDISAUTH=exampleRedisPassword
       # Configuration
       - TIME_ZONE=Europe/Berlin
       - BIND_ADDRESS=127.0.0.1:8856
