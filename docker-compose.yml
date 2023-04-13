@@ -76,3 +76,4 @@ services:
       - OFFLINE_MODE=False
       - CSRF_COOKIE_SECURE=False
       - SCRIPT_NAME=/patchman
+      - DOCKER_VERBOSE_CONFIG=True
