@@ -12,3 +12,4 @@ prompt-toolkit==3.0.38
 vine==5.0.0
 wcwidth==0.2.6
 redis==4.5.4
+psycopg2==2.9.6
