@@ -1,3 +1,5 @@
+import pprint
+pp = pprint.PrettyPrinter(indent=2)
 
 DOCKER_VERBOSE_CONFIG = False
 if os.environ.get('DOCKER_VERBOSE_CONFIG') is not None:
@@ -94,41 +96,50 @@ elif os.environ.get('PATCHMAN_CACHE') is "REDIS":
   }
 
 if DOCKER_VERBOSE_CONFIG:
-    pp DATABASES
-    pp CACHES
+    print("DATABASES")
+    pp.pprint(DATABASES)
+    print("CACHES")
+    pp.pprint(CACHES)
 
 if os.environ.get('DEBUG') is not None:
   DEBUG = os.environ.get('DEBUG')
   if DOCKER_VERBOSE_CONFIG:
-    pp DEBUG
+    print("DEBUG")
+    pp.pprint(DEBUG)
 
 if os.environ.get('PATCHMAN_SECRET_KEY') is not None:
   SECRET_KEY = str(os.environ.get('PATCHMAN_SECRET_KEY'))
   if DOCKER_VERBOSE_CONFIG:
-    pp SECRET_KEY
+    print("SECRET_KEY")
+    pp.pprint(SECRET_KEY)
 
 if os.environ.get('TIME_ZONE') is not None:
   TIME_ZONE = os.environ.get('TIME_ZONE')
   if DOCKER_VERBOSE_CONFIG:
-    pp TIME_ZONE
+    print("TIME_ZONE")
+    pp.pprint(TIME_ZONE)
   
 if os.environ.get('LANGUAGE_CODE') is not None:
   LANGUAGE_CODE = os.environ.get('LANGUAGE_CODE')
   if DOCKER_VERBOSE_CONFIG:
-    pp LANGUAGE_CODE
+    print("LANGUAGE_CODE")
+    pp.pprint(LANGUAGE_CODE)
 
 if os.environ.get('PATCHMAN_MAX_MIRRORS') is not None:
   MAX_MIRRORS = os.environ.get('PATCHMAN_MAX_MIRRORS')
   if DOCKER_VERBOSE_CONFIG:
-    pp MAX_MIRRORS
+    print("MAX_MIRRORS")
+    pp.pprint(MAX_MIRRORS)
   
 if os.environ.get('PATCHMAN_DAYS_WITHOUT_REPORT') is not None:
   DAYS_WITHOUT_REPORT = os.environ.get('PATCHMAN_DAYS_WITHOUT_REPORT')
   if DOCKER_VERBOSE_CONFIG:
-    pp DAYS_WITHOUT_REPORT
+    print("DAYS_WITHOUT_REPORT")
+    pp.pprint(DAYS_WITHOUT_REPORT)
 
   
 if os.environ.get('RUN_GUNICORN') is not None:
   RUN_GUNICORN = (os.environ.get('RUN_GUNICORN') == "True")
   if DOCKER_VERBOSE_CONFIG:
-    pp RUN_GUNICORN
+    print("RUN_GUNICORN")
+    pp.pprint(RUN_GUNICORN)
