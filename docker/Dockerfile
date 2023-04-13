@@ -54,8 +54,6 @@ RUN pip install --upgrade pip && \
 
 RUN apk add --no-cache redis
 
-# Install Patchman Python locally for patchman -a
-RUN python3 setup.py install
 
 # Create Default sqlite path
 RUN mkdir -p /var/lib/patchman/db
@@ -65,7 +63,8 @@ COPY . /build
 COPY ./etc/patchman/local_settings_docker.py /build/etc/patchman/local_settings.py
 COPY ./etc/patchman/local_settings_docker.py /etc/patchman/local_settings.py 
 
-
+# Install Patchman Python locally for patchman -a
+RUN python3 setup.py install
 
 ENV PATCHMAN_SETTINGS_PATH "./etc/patchman"
 ENV RUN_GUNICORN True
