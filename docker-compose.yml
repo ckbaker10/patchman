@@ -46,7 +46,8 @@ services:
       - "/usr/local/share/ca-certificates:/build/docker/certs/custom:ro"
       - ./input:/input
     command: tail -f /dev/null
-    network_mode: "host"
+    ports:
+      - "127.0.0.1:8856:8856"
     logging:
       driver: json-file
       options:
