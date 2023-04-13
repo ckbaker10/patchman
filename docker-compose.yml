@@ -44,6 +44,7 @@ services:
       # Add Host Trusted Certificates
       - "/usr/local/share/ca-certificates:/build/docker/certs/custom:ro"
       - ./input:/input
+    command: tail -f /dev/null
     network_mode: "host"
     logging:
       driver: json-file
