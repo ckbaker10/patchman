@@ -1,4 +1,5 @@
 import pprint
+import os
 pp = pprint.PrettyPrinter(indent=2)
 
 DOCKER_VERBOSE_CONFIG = False
@@ -15,7 +16,7 @@ DATABASES = {
   }
 }
 
-if os.environ.get('PATCHMAN_DB') is "SQLLITE":
+if os.environ.get('PATCHMAN_DB') == "SQLLITE":
   SQLLITEPATH = '/var/lib/patchman/db/patchman.db'
   if os.environ.get('SQLLITEPATH') is not None:
     SQLLITEPATH = str(os.environ.get('SQLLITEPATH'))
@@ -25,7 +26,7 @@ if os.environ.get('PATCHMAN_DB') is "SQLLITE":
       'NAME': str(SQLLITEPATH),
     }
   }
-elif os.environ.get('PATCHMAN_DB') is "POSTGRES":
+elif os.environ.get('PATCHMAN_DB') == "POSTGRES":
   POSTGRES_USER = "patchman"
   POSTGRES_PASSWORD = "patchman"
   POSTGRES_DB = "patchman"
@@ -53,7 +54,7 @@ elif os.environ.get('PATCHMAN_DB') is "POSTGRES":
     }
   }
   
-if os.environ.get('PATCHMAN_CACHE') is "MEMCACHE":
+if os.environ.get('PATCHMAN_CACHE') == "MEMCACHE":
   MEMCACHEPORT = '11211'
   MEMCACHEHOST = '127.0.0.1'
   if os.environ.get('MEMCACHEPORT') is not None:
@@ -66,7 +67,7 @@ if os.environ.get('PATCHMAN_CACHE') is "MEMCACHE":
       'LOCATION': str(MEMCACHEHOST) + ":" + str(MEMCACHEHOST),
     }
   }
-elif os.environ.get('PATCHMAN_CACHE') is "REDIS":
+elif os.environ.get('PATCHMAN_CACHE') == "REDIS":
   REDISHOST = "127.0.0.1"
   REDISPORT = 6379
   REDISDB = 1
