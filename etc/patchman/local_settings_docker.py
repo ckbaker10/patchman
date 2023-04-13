@@ -17,6 +17,8 @@ DATABASES = {
   }
 }
 
+CELERY_BROKER_URL=""
+
 USE_ASYNC_PROCESSING = False
 
 if os.environ.get('PATCHMAN_DB') == "SQLLITE":
@@ -145,13 +147,21 @@ if os.environ.get('PATCHMAN_DAYS_WITHOUT_REPORT') is not None:
   if DOCKER_VERBOSE_CONFIG:
     print("DAYS_WITHOUT_REPORT")
     pp.pprint(DAYS_WITHOUT_REPORT)
-
   
 if os.environ.get('RUN_GUNICORN') is not None:
   RUN_GUNICORN = (os.environ.get('RUN_GUNICORN') == "True")
   if DOCKER_VERBOSE_CONFIG:
     print("RUN_GUNICORN")
     pp.pprint(RUN_GUNICORN)
-    
+
+if DOCKER_VERBOSE_CONFIG:
+  print("USE_ASYNC_PROCESSING")
+  pp.pprint(USE_ASYNC_PROCESSING)
+
+if DOCKER_VERBOSE_CONFIG:
+  print("CELERY_BROKER_URL")
+  pp.pprint(CELERY_BROKER_URL)
+
+  
 if DOCKER_VERBOSE_CONFIG:
   print("-------------------------------------------------------------")
