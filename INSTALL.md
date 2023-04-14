@@ -289,7 +289,7 @@ Apache Configuration to use the docker container as reverse proxy
     ProxyPass /patchman/static/img !
     ProxyPass /patchman/static/js !
     # Exclude Upload from proxy, denying upload from outside the machine
-    ProxyPass /patchman/upload !
+    ProxyPass /patchman/reports/upload !
     ProxyPass /patchman http://127.0.0.1:8856/patchman
     ProxyPassReverse /patchman http://127.0.0.1:8856/patchman
 
