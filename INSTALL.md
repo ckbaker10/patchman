@@ -11,6 +11,8 @@ mysql or postgresql instead, see the database configuration section.
   - [virtualenv + pip](#virtualenv--pip)
   - [Source](#source)
 
+## In development
+  - [Docker](#docker)
 
 ### Ubuntu 20.04 (focal)
 
@@ -252,6 +254,56 @@ N.B. To run patchman-manage when installing from source, run `./manage.py`
 
 2. Restart the web server after syncing the database.
 
+### Docker
+
+The docker container provides:
+  - Internal Redis for cache and celery
+  - Internal Celery process
+  - Internal Webserver using gunicorn
+
+Inside the docker container `patchman -a` is available
+
+Apache Configuration to use the docker container as reverse proxy
+
+```
+<VirtualHost *:443>
+    ServerName yourhost.domain.loc
+    SSLEngine on
+    SSLCertificateFile      /etc/ssl/certs/ssl-cert-snakeoil.pem
+    SSLCertificateKeyFile   /etc/ssl/private/ssl-cert-snakeoil.key
+    Header always set Strict-Transport-Security "max-age=63072000"
+    #SSLProtocol             all -SSLv3 -TLSv1 -TLSv1.1 -TLSv1.2
+    SSLProtocol             all -SSLv3 -TLSv1 -TLSv1.1
+    SSLHonorCipherOrder     off
+    SSLSessionTickets       off
+
+    Protocols h2 http/1.1
+
+    <Proxy *>
+        Order deny,allow
+        Allow from all
+    </Proxy>
+
+    # Exclude Static from Proxy
+    ProxyPass /patchman/static/css !
+    ProxyPass /patchman/static/img !
+    ProxyPass /patchman/static/js !
+    # Exclude Upload from proxy, denying upload from outside the machine
+    ProxyPass /patchman/upload !
+    ProxyPass /patchman http://127.0.0.1:8856/patchman
+    ProxyPassReverse /patchman http://127.0.0.1:8856/patchman
+
+    Alias /patchman/static "/var/www/patchman/static"
+
+    <Directory "/var/www/patchman/static">
+        Options None
+        #Options +Indexes
+        AllowOverride None
+        Order allow,deny
+        Allow from all
+    </Directory>
+</VirtualHost>
+```
 
 ## Configure Web Server
 
