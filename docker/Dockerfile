@@ -59,6 +59,9 @@ RUN pip install --upgrade pip && \
     pip install --use-pep517 -r requirementsDocker.txt 
 
 RUN apk add --no-cache supervisor redis
+# Console Output for Supervirsor
+# https://stackoverflow.com/a/21371113
+RUN pip install --use-pep517 supervisor-stdout
 
 # Create Default sqlite path
 RUN mkdir -p /var/lib/patchman/db
