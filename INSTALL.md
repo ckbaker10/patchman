@@ -305,6 +305,42 @@ Apache Configuration to use the docker container as reverse proxy
 </VirtualHost>
 ```
 
+## Example Ansible Playbook for Pull Method
+```
+---
+- name: Pull Patchman Reports from Hosts
+  hosts: all, !localhost
+  vars:
+    date: "{{ lookup('pipe', 'date +%Y%m%d-%H%M%S') }}"
+  tasks:
+    - name: Make sure curl is installed
+      ansible.builtin.apt:
+        name: curl
+        state: present
+    - name: Make sure coreutils is installed
+      ansible.builtin.apt:
+        name: coreutils
+        state: present
+    - name: Make sure patchman client is available
+      copy:
+        src: /etc/ansible/linux-playbooks/hostfiles/ahostname/patchman/patchman-client
+        dest: /tmp/patchman-client
+        mode: '0544'
+        force: no
+    - name: Generate Report
+      ansible.builtin.shell: bash /tmp/patchman-client -L /tmp/patchman-report.dat
+    - name: Grab Report from Host
+      fetch:
+        src: /tmp/patchman-report.dat
+        dest: "/tmp/patchman-reports/{{ inventory_hostname }}-{{ date }}-report.dat"
+        flat: yes
+- name: Import reports to Patchman
+  hosts: localhost
+  tasks:
+    - name: Insert Report into local Patchman
+      ansible.builtin.shell: find /tmp/patchman-reports/ -name "*.dat" -maxdepth 1 -type f -exec /etc/ansible/linux-playbooks/hostfiles/ahostname/patchman/patchman-client -s http://127.0.0.1:8856/patchman -P {} -D \;
+```
+
 ## Configure Web Server
 
 ### Apache

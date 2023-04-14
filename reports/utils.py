@@ -82,6 +82,10 @@ def process_packages(report, host):
                 try:
                     with transaction.atomic():
                         host.packages.add(package)
+                except psycopg2.errors.lookup(psycopg2.errorcodes.UNIQUE_VIOLATION) as e:
+                  # Package was added previously, somehow. Ignore
+                  # https://stackoverflow.com/a/69125422
+                  pass
                 except IntegrityError as e:
                     error_message.send(sender=None, text=e)
                 except DatabaseError as e:
