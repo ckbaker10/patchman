@@ -25,6 +25,8 @@ DATABASES = {
   }
 }
 
+DEBUG=False
+
 CELERY_BROKER_URL="redis://127.0.0.1:6379/0"
 
 USE_ASYNC_PROCESSING = True
