@@ -5,7 +5,7 @@ services:
     image: postgres:latest
     restart: always
     environment:
-      - PGUSER=postgres
+      - PGUSER=patchman
       - POSTGRES_USER=patchman
       - POSTGRES_PASSWORD=patchman
       - POSTGRES_DB=patchman
