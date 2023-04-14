@@ -1,17 +1,17 @@
 version: "3"
 services:
-  cache:
-    container_name: patchman-cache
-    image: redis:latest
-    restart: always
-    command: redis-server --save 20 1 --loglevel warning --requirepass exampleRedisPassword
-    volumes: 
-      - ./cache:/data
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 1s
-      timeout: 3s
-      retries: 30
+  # cache:
+    # container_name: patchman-cache
+    # image: redis:latest
+    # restart: always
+    # command: redis-server --save 20 1 --loglevel warning --requirepass exampleRedisPassword
+    # volumes: 
+      # - ./cache:/data
+    # healthcheck:
+      # test: ["CMD", "redis-cli", "ping"]
+      # interval: 1s
+      # timeout: 3s
+      # retries: 30
   db:
     container_name: patchman-db
     image: postgres:latest
@@ -40,7 +40,7 @@ services:
       # Add Host Trusted Certificates
       - "/usr/local/share/ca-certificates:/build/docker/certs/custom:ro"
       - ./input:/input
-    command: tail -f /dev/null
+    # command: tail -f /dev/null
     ports:
       - "127.0.0.1:8856:8856"
     logging:
@@ -56,8 +56,8 @@ services:
 
     # Wait for Services to come up
     depends_on:
-      cache:
-        condition: service_healthy
+      # cache:
+        # condition: service_healthy
       db:
         condition: service_healthy
       
