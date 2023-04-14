@@ -58,10 +58,14 @@ RUN pip install --upgrade pip && \
     pip install --use-pep517 -r requirements.txt &&\
     pip install --use-pep517 -r requirementsDocker.txt 
 
-RUN apk add --no-cache supervisor redis
+RUN apk add --no-cache supervisor redis git
 # Console Output for Supervirsor
 # https://stackoverflow.com/a/21371113
-RUN pip3 install --use-pep517 supervisor-stdout
+# RUN pip install --use-pep517 supervisor-stdout
+# Old version in PIP, not python3 compatible
+RUN mkdir /tmp/supervisor-stdout
+RUN git clone https://github.com/coderanger/supervisor-stdout.git /tmp/supervisor-stdout/
+RUN cd /tmp/supervisor-stdout/*/ && python3 setup.py install
 
 # Create Default sqlite path
 RUN mkdir -p /var/lib/patchman/db
