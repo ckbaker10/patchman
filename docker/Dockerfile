@@ -1,17 +1,6 @@
 FROM alpine:3.17 AS builder
 # https://github.com/nimmis/docker-alpine/blob/master/Dockerfile
 # I would have used his image but the versions are rather old
-
-# ARG BUILD_DEPENDENCIES="build-base \
-    # libffi-dev \
-    # libxml2-dev \
-    # mariadb-connector-c-dev \
-    # openldap-dev \
-    # python3-dev \
-    # xmlsec-dev \
-    # npm \
-    # yarn \
-    # cargo"
     
 ARG BUILD_DEPENDENCIES="build-base \
     libffi-dev \
@@ -30,8 +19,7 @@ ARG BUILD_DEPENDENCIES="build-base \
 
 ENV LC_ALL=en_US.UTF-8 \
     LANG=en_US.UTF-8 \
-    LANGUAGE=en_US.UTF-8 \
-    FLASK_APP=/build/powerdnsadmin/__init__.py
+    LANGUAGE=en_US.UTF-8
 
 RUN mkdir /tmp-pkg && cd /tmp-pkg && wget http://dl-cdn.alpinelinux.org/alpine/v3.17/main/x86_64/ca-certificates-20220614-r4.apk && apk add --allow-untrusted --no-network --no-cache /tmp-pkg/ca-certificates-20220614-r4.apk || true
 RUN rm -rf /tmp/pkg
@@ -63,9 +51,9 @@ RUN apk add --no-cache supervisor redis git
 # https://stackoverflow.com/a/21371113
 # RUN pip install --use-pep517 supervisor-stdout
 # Old version in PIP, not python3 compatible
-RUN mkdir /tmp/supervisor-stdout
-RUN git clone https://github.com/coderanger/supervisor-stdout.git /tmp/supervisor-stdout/
-RUN cd /tmp/supervisor-stdout/ && python3 setup.py install
+RUN mkdir /opt/supervisor-stdout
+RUN git clone https://github.com/coderanger/supervisor-stdout.git /opt/supervisor-stdout/
+RUN cd /opt/supervisor-stdout/ && python3 setup.py install
 
 # Create Default sqlite path
 RUN mkdir -p /var/lib/patchman/db

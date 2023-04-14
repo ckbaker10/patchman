@@ -85,7 +85,7 @@ elif os.environ.get('PATCHMAN_CACHE') == "REDIS":
   REDISPORT = 6379
   REDISDB = 1
   REDISAUTH = ""
-  REDISKEYPREFIX = "patchman"
+  REDISKEYPREFIX = "PATCHMAN"
   if os.environ.get('REDISHOST') is not None:
     REDISHOST = str(os.environ.get('REDISHOST'))
   if os.environ.get('REDISPORT') is not None:
