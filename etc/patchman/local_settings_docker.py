@@ -7,9 +7,17 @@ if os.environ.get('DOCKER_VERBOSE_CONFIG') is not None:
   DOCKER_VERBOSE_CONFIG = True
 
 # Default Values
+# Using Internal Redis by Default
 CACHES = {
-}
-
+    "default": {
+      "BACKEND": "django_redis.cache.RedisCache",
+      "LOCATION": "redis://127.0.0.1:6379/1",
+      "OPTIONS": {
+        "CLIENT_CLASS": "django_redis.client.DefaultClient"
+      },
+      "KEY_PREFIX": "PATCHMAN"
+    }
+  }
 DATABASES = {
   'default': {
     'ENGINE': 'django.db.backends.sqlite3',
@@ -17,9 +25,9 @@ DATABASES = {
   }
 }
 
-CELERY_BROKER_URL=""
+CELERY_BROKER_URL="redis://127.0.0.1:6379/0"
 
-USE_ASYNC_PROCESSING = False
+USE_ASYNC_PROCESSING = True
 
 if os.environ.get('PATCHMAN_DB') == "SQLLITE":
   SQLLITEPATH = '/var/lib/patchman/db/patchman.db'
@@ -102,8 +110,8 @@ elif os.environ.get('PATCHMAN_CACHE') == "REDIS":
   }
 
   
-  CELERY_BROKER_URL = "redis://:" + str(REDISAUTH) + "@" + str(REDISHOST) + ":" + str(REDISPORT) + "/0"
-
+  #CELERY_BROKER_URL = "redis://:" + str(REDISAUTH) + "@" + str(REDISHOST) + ":" + str(REDISPORT) + "/0"
+  # Using an Internal REDIS
 
 if DOCKER_VERBOSE_CONFIG:
   print("-------------PARSED DOCKER ENVIRONMENT VARIABLES-------------")

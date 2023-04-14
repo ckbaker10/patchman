@@ -71,11 +71,11 @@ services:
       - POSTGRES_USER=patchman
       - POSTGRES_PASSWORD=patchman
       - POSTGRES_DB=patchman
-      # Cache
-      - PATCHMAN_CACHE=REDIS
-      # Use Containername as Host
-      - REDISHOST=patchman-cache
-      - REDISAUTH=exampleRedisPassword
+      # # Cache
+      # - PATCHMAN_CACHE=REDIS
+      # # Use Containername as Host
+      # - REDISHOST=patchman-cache
+      # - REDISAUTH=exampleRedisPassword
       # Configuration
       - TIME_ZONE=Europe/Berlin
       - BIND_ADDRESS=0.0.0.0:8856
