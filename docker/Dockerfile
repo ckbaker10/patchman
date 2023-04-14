@@ -58,8 +58,7 @@ RUN pip install --upgrade pip && \
     pip install --use-pep517 -r requirements.txt &&\
     pip install --use-pep517 -r requirementsDocker.txt 
 
-RUN apk add --no-cache redis
-
+RUN apk add --no-cache supervisor redis
 
 # Create Default sqlite path
 RUN mkdir -p /var/lib/patchman/db
@@ -68,6 +67,7 @@ RUN mkdir -p /var/lib/patchman/db
 COPY . /build
 COPY ./etc/patchman/local_settings_docker.py /build/etc/patchman/local_settings.py
 COPY ./etc/patchman/local_settings_docker.py /etc/patchman/local_settings.py 
+COPY ./docker/supervisord.conf /etc/supervisord.conf
 
 # Install Patchman Python locally for patchman -a
 RUN python3 setup.py install
@@ -81,4 +81,5 @@ ENV SSL_CERT_DIR /etc/ssl/certs
 
 RUN chmod +x /build/docker/startup.sh
 
-CMD ["sh", "-c", "docker/startup.sh" ]
+#CMD ["sh", "-c", "docker/startup.sh" ]
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]

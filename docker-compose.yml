@@ -4,8 +4,6 @@ services:
     container_name: patchman-cache
     image: redis:latest
     restart: always
-    #ports:
-    #  - '6379:6379'
     command: redis-server --save 20 1 --loglevel warning --requirepass exampleRedisPassword
     volumes: 
       - ./cache:/data
@@ -22,8 +20,6 @@ services:
       - POSTGRES_USER=patchman
       - POSTGRES_PASSWORD=patchman
       - POSTGRES_DB=patchman
-    #ports:
-    #  - '5432:5432'
     volumes: 
       - ./db:/var/lib/postgresql/data
     healthcheck:
@@ -32,7 +28,6 @@ services:
       timeout: 5s
       retries: 5
   app:
-    #image: powerdnsadmin/pda-legacy:latest
     image: patchman/custom
     container_name: patchman
     restart: always
@@ -58,6 +53,7 @@ services:
     #  timeout: 8m
     #  retries: 3
     #  start_period: 2m
+
     # Wait for Services to come up
     depends_on:
       cache:

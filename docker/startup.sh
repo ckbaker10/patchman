@@ -5,7 +5,6 @@ cd "$SCRIPTPATH"
 python3 /build/manage.py makemigrations
 python3 /build/manage.py migrate --run-syncdb
 
-set -x
 if [ -d ./certs ]; then
   if ls ./certs/*.crt 1> /dev/null 2>&1; then
     rm -rf /usr/local/share/ca-certificates/*
