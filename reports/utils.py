@@ -272,9 +272,18 @@ def process_repo(repo, arch):
                 repository.save()
         if mirror['url'].find('security') != -1:
             repository.security = True
-            with transaction.atomic():
-                repository.save()
-
+            try:
+                with transaction.atomic():
+                    repository.save()
+            except psycopg2.errors.lookup(psycopg2.errorcodes.UNIQUE_VIOLATION) as e:
+                # Package was added previously, somehow. Ignore
+                # Suspecting race condition between patchman -a and celery
+                # https://stackoverflow.com/a/69125422
+                pass
+            except IntegrityError as e:
+                error_message.send(sender=None, text=e)
+            except DatabaseError as e:
+                error_message.send(sender=None, text=e)
     return repository, r_priority
 
 
