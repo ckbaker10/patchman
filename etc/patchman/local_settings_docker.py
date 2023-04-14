@@ -111,6 +111,7 @@ elif os.environ.get('PATCHMAN_CACHE') == "REDIS":
     }
   }
 
+
   
   #CELERY_BROKER_URL = "redis://:" + str(REDISAUTH) + "@" + str(REDISHOST) + ":" + str(REDISPORT) + "/0"
   # Using an Internal REDIS
